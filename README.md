@@ -1,6 +1,6 @@
 # 📄 MCP PDF Server
 
-A PDF file reading server based on [FastMCP](https://github.com/minimaxir/fastmcp).
+A PDF file reading server based on [FastMCP](https://github.com/jlowin/fastmcp).
 
 Supports PDF text extraction, OCR recognition, and image extraction via the MCP protocol, with a built-in web debugger for easy testing.
 
@@ -35,11 +35,7 @@ mcp-pdf-reader/
 
 Recommended Python version: 3.10+
 
-```bash
-pip install -e .
-```
-
-Or using `uv`:
+using `uv`:
 
 ```bash
 uv sync
@@ -66,7 +62,26 @@ INFO:mcp-pdf-server:PDF resources will be stored in: C:\...\pdf_resources
 
 The server will start and expose MCP tools via stdio protocol.
 
+If you want to use this tool in Claude Desktop, config this JSON.
+
+```json
+{
+  "mcpServers": {
+    "pdf-reader-custom": {
+      "command": "uv",
+      "args": [
+         "--directory",
+         "path/to/your/pdf-mcp",
+         "run",
+         "pdf_server.py"
+      ]
+    }
+  }
+}
+```
+
 ---
+
 
 ## 🛠️ API Tool List
 
