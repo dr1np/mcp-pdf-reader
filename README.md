@@ -21,10 +21,11 @@ Supports PDF text extraction, OCR recognition, and image extraction via the MCP 
 
 ## 📂 Project Structure
 
-```
-mcp-pdf-server/
+```text
+mcp-pdf-reader/
 ├── pdf_resources/        # Directory for uploaded and processed PDF files
-├── txt_server.py         # Main server entry point
+├── pdf_server.py         # Main server entry point
+├── pyproject.toml        # Project configuration and dependencies
 └── README.md             # Project documentation
 ```
 
@@ -32,10 +33,16 @@ mcp-pdf-server/
 
 ## ⚙️ Installation
 
-Recommended Python version: 3.9+
+Recommended Python version: 3.10+
 
 ```bash
-pip install pymupdf mcp
+pip install -e .
+```
+
+Or using `uv`:
+
+```bash
+uv sync
 ```
 
 > Note: To use OCR features, you may need a MuPDF build with OCR support or external OCR libraries.
@@ -47,30 +54,17 @@ pip install pymupdf mcp
 Run the following command:
 
 ```bash
-python txt_server.py
+python pdf_server.py
 ```
 
 You should see logs like:
 
-```
-Serving on http://127.0.0.1:6231
-```
-
----
-
-## 🌐 Web Debugging Interface
-
-Open your browser and visit:
-
-```
-http://127.0.0.1:6231
+```text
+INFO:mcp-pdf-server:Starting MCP PDF Server...
+INFO:mcp-pdf-server:PDF resources will be stored in: C:\...\pdf_resources
 ```
 
-- Select a tool from the left panel
-- Fill in parameters on the right panel
-- Click "Run" to test the tool
-
-No coding required — easily debug and test via the web UI.
+The server will start and expose MCP tools via stdio protocol.
 
 ---
 
@@ -86,22 +80,58 @@ No coding required — easily debug and test via the web UI.
 
 ## 📝 Example Usage
 
-Extract text from pages 1 to 5:
+This is an MCP server that exposes tools to be called by MCP clients. The tools can be integrated into:
 
-```bash
-mcp run read_pdf_text --args '{"file_path": "pdf_resources/example.pdf", "start_page": 1, "end_page": 5}'
+- **Claude Desktop** via MCP configuration
+- **LLM applications** using the MCP protocol
+- **Custom scripts** using MCP client libraries
+
+Example parameters for each tool:
+
+**Extract text from pages 1 to 5:**
+
+```json
+{
+  "file_path": "pdf_resources/example.pdf",
+  "start_page": 1,
+  "end_page": 5
+}
 ```
 
-Perform OCR recognition on page 1:
+**Perform OCR recognition on page 1:**
 
-```bash
-mcp run read_by_ocr --args '{"file_path": "pdf_resources/example.pdf", "start_page": 1, "end_page": 1, "language": "eng"}'
+```json
+{
+  "file_path": "pdf_resources/example.pdf",
+  "start_page": 1,
+  "end_page": 1,
+  "language": "eng",
+  "dpi": 300
+}
 ```
 
-Extract all images from page 3:
+**Extract all images from page 3:**
 
-```bash
-mcp run read_pdf_images --args '{"file_path": "pdf_resources/example.pdf", "page_number": 3}'
+```json
+{
+  "file_path": "pdf_resources/example.pdf",
+  "page_number": 3
+}
+```
+
+### Integration with Claude Desktop
+
+Add to your Claude Desktop config:
+
+```json
+{
+  "mcpServers": {
+    "pdf-reader": {
+      "command": "python",
+      "args": ["/path/to/pdf_server.py"]
+    }
+  }
+}
 ```
 
 ---
@@ -118,5 +148,3 @@ mcp run read_pdf_images --args '{"file_path": "pdf_resources/example.pdf", "page
 
 This project is licensed under the MIT License.  
 For commercial use, please credit the original source.
-
----

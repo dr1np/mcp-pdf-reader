@@ -2,7 +2,7 @@ from typing import Optional, List, Dict, Any
 import os, json
 import base64
 import fitz
-from mcp.server.fastmcp import FastMCP
+from fastmcp import FastMCP
 import uuid
 import logging
 from datetime import datetime
@@ -13,7 +13,7 @@ logger = logging.getLogger('mcp-pdf-server')
 PDF_DIR = os.path.join(os.getcwd(), "pdf_resources")
 os.makedirs(PDF_DIR, exist_ok=True)
 
-mcp = FastMCP("PDF Reader", version="1.0.0", description="MCP server for PDF reading")
+mcp = FastMCP("PDF Reader", version="1.0.0")
 
 pdf_resources = {}
 pdf_cache = {}
